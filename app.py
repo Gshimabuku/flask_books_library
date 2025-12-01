@@ -14,5 +14,11 @@ def list_page():
 def detail_page():
     return render_template('detail.html')
 
+@app.route("/debug/env")
+def debug_env():
+    return {
+        "token": os.getenv("NOTION_API_TOKEN")
+    }
+
 if __name__ == '__main__':
     app.run(debug=True)
