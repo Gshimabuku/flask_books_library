@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from notion_client import get_courses
+from notion_service import get_courses
 import os
 
 app = Flask(__name__)
