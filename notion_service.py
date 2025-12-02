@@ -12,26 +12,33 @@ HOLES_DB_ID = os.getenv("NOTION_DB_HOLES_ID")
 
 
 # ------------------------------
-# コース一覧取得
+# コース一覧取得（courses DB）
 # ------------------------------
 def get_courses():
-    """
-    courses DB の全コースを取得
-    """
     results = []
     try:
-        response = notion.databases.query(database_id=COURSES_DB_ID)
+        response = notion.databases.query_database(
+            database_id=COURSES_DB_ID,
+            body={}
+        )
+
         for page in response.get("results", []):
             course = {
                 "id": page["id"],
-                "name": page["properties"]["name"]["title"][0]["plain_text"] if page["properties"]["name"]["title"] else "",
-                "address": page["properties"]["address"]["rich_text"][0]["plain_text"] if page["properties"]["address"]["rich_text"] else "",
-                "type": page["properties"]["type"]["select"]["name"] if page["properties"]["type"]["select"] else "",
-                "par": page["properties"]["par"]["number"] if page["properties"]["par"]["number"] else 0,
+                "name": page["properties"]["name"]["title"][0]["plain_text"]
+                        if page["properties"]["name"]["title"] else "",
+                "address": page["properties"]["address"]["rich_text"][0]["plain_text"]
+                        if page["properties"]["address"]["rich_text"] else "",
+                "type": page["properties"]["type"]["select"]["name"]
+                        if page["properties"]["type"]["select"] else "",
+                "par": page["properties"]["par"]["number"]
+                        if page["properties"]["par"]["number"] else 0,
             }
             results.append(course)
+
     except Exception as e:
         print("get_courses error:", e)
+
     return results
 
 
@@ -39,51 +46,57 @@ def get_courses():
 # コース詳細取得（layouts + holes）
 # ------------------------------
 def get_course_details(course_id):
-    """
-    layouts + holes を含めたコース詳細を取得
-    """
     course_data = {}
+
     try:
-        # layouts を取得
-        layouts_response = notion.databases.query(
+        # ----- layouts 取得 -----
+        layouts_response = notion.databases.query_database(
             database_id=LAYOUTS_DB_ID,
-            filter={
-                "property": "course",
-                "relation": {
-                    "contains": course_id
+            body={
+                "filter": {
+                    "property": "course",
+                    "relation": {"contains": course_id}
                 }
             }
         )
+
         layouts = []
+
         for layout_page in layouts_response.get("results", []):
             layout_id = layout_page["id"]
             layout = {
                 "id": layout_id,
-                "layout_name": layout_page["properties"]["layout_name"]["title"][0]["plain_text"] if layout_page["properties"]["layout_name"]["title"] else "",
-                "par": layout_page["properties"]["par"]["number"] if layout_page["properties"]["par"]["number"] else 0,
+                "layout_name": layout_page["properties"]["layout_name"]["title"][0]["plain_text"]
+                                if layout_page["properties"]["layout_name"]["title"] else "",
+                "par": layout_page["properties"]["par"]["number"]
+                        if layout_page["properties"]["par"]["number"] else 0,
                 "holes": []
             }
 
-            # holes を取得
-            holes_response = notion.databases.query(
+            # ----- holes 取得 -----
+            holes_response = notion.databases.query_database(
                 database_id=HOLES_DB_ID,
-                filter={
-                    "property": "layout",
-                    "relation": {
-                        "contains": layout_id
+                body={
+                    "filter": {
+                        "property": "layout",
+                        "relation": {"contains": layout_id}
                     }
                 }
             )
+
             holes_list = []
+
             for hole_page in holes_response.get("results", []):
                 hole = {
                     "id": hole_page["id"],
-                    "hole_number": hole_page["properties"]["hole_number"]["number"] if hole_page["properties"]["hole_number"]["number"] else 0,
-                    "par": hole_page["properties"]["par"]["number"] if hole_page["properties"]["par"]["number"] else 0
+                    "hole_number": hole_page["properties"]["hole_number"]["number"]
+                                    if hole_page["properties"]["hole_number"]["number"] else 0,
+                    "par": hole_page["properties"]["par"]["number"]
+                                    if hole_page["properties"]["par"]["number"] else 0
                 }
                 holes_list.append(hole)
 
-            # ホール番号でソート
+            # ホール番号順にソート
             layout["holes"] = sorted(holes_list, key=lambda x: x["hole_number"])
             layouts.append(layout)
 
