@@ -1,35 +1,23 @@
 <!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>コース一覧</title>
-</head>
+<html>
+<head><title>コース一覧</title></head>
 <body>
     <h1>コース一覧</h1>
-    <a href="/">ホームに戻る</a>
-    <table border="1" cellpadding="5" cellspacing="0">
-        <thead>
-            <tr>
-                <th>コース名</th>
-                <th>住所</th>
-                <th>タイプ</th>
-                <th>パー</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for course in courses %}
-            <tr>
-                <td>{{ course.name }}</td>
-                <td>{{ course.address }}</td>
-                <td>{{ course.type }}</td>
-                <td>{{ course.par }}</td>
-            </tr>
-            {% else %}
-            <tr>
-                <td colspan="4">コースは登録されていません</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+
+    {% if courses %}
+        <ul>
+        {% for c in courses %}
+            <li>
+                <strong>{{ c.name }}</strong><br>
+                種類：{{ c.type }}<br>
+                PAR：{{ c.par }}<br>
+                住所：{{ c.address }}
+            </li>
+            <hr>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>コースがありません。</p>
+    {% endif %}
 </body>
 </html>
