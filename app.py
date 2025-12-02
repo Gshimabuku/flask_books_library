@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 from services.notion_service import get_courses
-from config import NOTION_API_KEY
+from config import NOTION_API_KEY,NOTION_DB_COURSES_ID
 
 app = Flask(__name__)
 
@@ -29,6 +29,7 @@ def courses_list():
 def debug_env():
     return {
         "NOTION_API_KEY_exists": bool(NOTION_API_KEY),
+        "NOTION_DB_COURSES_ID_exists": bool(NOTION_DB_COURSES_ID),
     }
 
 
