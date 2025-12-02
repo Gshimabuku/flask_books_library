@@ -1,8 +1,9 @@
 import os
 from notion_client import Client
+from config import NOTION_API_KEY
 
 # Notion API クライアント作成
-notion = Client(auth=os.getenv("NOTION_API_KEY"))
+notion = Client(auth=NOTION_API_KEY)
 
 # DB ID を環境変数から取得
 COURSES_DB_ID = os.getenv("NOTION_DB_COURSES_ID")
