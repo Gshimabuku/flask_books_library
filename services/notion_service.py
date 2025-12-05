@@ -12,7 +12,7 @@ def get_courses():
     results = []
 
     try:
-        data = fetch_db_properties(database_id)
+        data = fetch_db_properties(NOTION_DB_COURSES_ID)
         results = data
         # response = notion.databases.query(
         #     **{
