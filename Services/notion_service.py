@@ -1,50 +1,14 @@
 import os
 from notion_client import Client
-from config import NOTION_API_KEY, NOTION_DB_COURSES_ID
+from config import NOTION_API_KEY
 
 # Notion クライアント
 notion = Client(auth=NOTION_API_KEY)
 
 # ---------------------------------
-# コース一覧取得（最小）
+# DBからデータ取得
+# 　プロパティ自動検出
 # ---------------------------------
-def get_courses():
-    results = []
-
-    try:
-        data = fetch_db_properties(NOTION_DB_COURSES_ID)
-        results = data
-        # response = notion.databases.query(
-        #     **{
-        #         "database_id": NOTION_DB_COURSES_ID
-        #     }
-        # )
-
-        # for page in response.get("results", []):
-        #     properties = page["properties"]
-
-        #     course = {
-        #         "id": page["id"],
-        #         "name": properties["name"]["title"][0]["plain_text"]
-        #         if properties["name"]["title"] else "",
-
-        #         "address": properties["address"]["rich_text"][0]["plain_text"]
-        #         if properties["address"]["rich_text"] else "",
-
-        #         "type": properties["type"]["select"]["name"]
-        #         if properties["type"]["select"] else "",
-
-        #         "par": properties["par"]["number"]
-        #         if properties["par"]["number"] else 0,
-        #     }
-
-        #     results.append(course)
-
-    except Exception as e:
-        print("get_courses error:", e)
-
-    return results
-
 def get_property_value(prop):
     type_ = prop["type"]
     if type_ == "title":
@@ -85,6 +49,11 @@ def get_property_value(prop):
         return prop["last_edited_time"]
     return None
 
+# ---------------------------------
+# DBからデータ取得
+# 　database_id：データベースID（configから取得）
+# 　column_names：取得カラムリスト（引数なしの場合全カラム）
+# ---------------------------------
 def fetch_db_properties(database_id: str, column_names: list = None):
     """
     指定 DB のデータを取得。

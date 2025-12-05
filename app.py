@@ -1,6 +1,6 @@
 from flask import Flask, render_template, jsonify, redirect, url_for, Response
 import os
-from services.notion_service import get_courses
+from Services.course_service import get_courses
 
 app = Flask(__name__)
 
