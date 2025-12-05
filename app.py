@@ -12,6 +12,10 @@ def index():
 def home():
     return render_template('home.html')
 
+@app.route('/health', methods=['GET'])
+def health():
+    return Response("OK", status=200)
+
 # --------------------------
 # コース
 # --------------------------
