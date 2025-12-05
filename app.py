@@ -14,7 +14,7 @@ def home():
 
 @app.route('/health', methods=['GET'])
 def health():
-    return Response("OK", status=200)
+    return "OK", 200
 
 # --------------------------
 # コース
