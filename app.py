@@ -20,13 +20,16 @@ def health():
 # コース
 # --------------------------
 @app.route('/course/list')
-def courses():
+def course_list():
     data = get_courses()
     return render_template('course/list.html', courses=data)
 
 # --------------------------
 # ラウンド
 # --------------------------
+@app.route('/round/new')
+def round_new():
+    return render_template('round/new.html')
 
 
 if __name__ == '__main__':
