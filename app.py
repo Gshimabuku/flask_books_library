@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, redirect, url_for
+from flask import Flask, render_template, jsonify, redirect, url_for, Response
 import os
 from services.notion_service import get_courses
 
@@ -14,7 +14,7 @@ def home():
 
 @app.route('/health', methods=['GET'])
 def health():
-    return "OK", 200
+    return Response("OK", status=200)
 
 # --------------------------
 # コース
