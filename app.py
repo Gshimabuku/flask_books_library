@@ -22,7 +22,7 @@ def health():
 @app.route('/course/list')
 def courses():
     data = get_courses()
-    return render_template('courses/list.html', courses=data)
+    return render_template('course/list.html', courses=data)
 
 # --------------------------
 # ラウンド
