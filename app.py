@@ -21,17 +21,17 @@ def health():
 # --------------------------
 @app.route('/course/list')
 def course_list():
-    courses = get_courses()
-    layouts = get_layouts()
-    return render_template('course/list.html', courses=data, layouts=layouts)
+    data = get_courses()
+    return render_template('course/list.html', courses=data)
 
 # --------------------------
 # ラウンド
 # --------------------------
 @app.route('/round/new')
 def round_new():
-    data = get_courses()
-    return render_template('round/new.html', courses=data)
+    courses = get_courses()
+    layouts = get_layouts()
+    return render_template('round/new.html', courses=courses, layouts=layouts)
 
 
 if __name__ == '__main__':
