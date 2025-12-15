@@ -13,6 +13,10 @@
         <label for="play_date">ラウンド日:</label>
         <input type="date" id="play_date" name="play_date" required>
 
+        {% for course in courses %}
+            <p>{{ course }}</p>
+        {% endfor %}
+
         <!-- コース選択 -->
         <label for="course_id">コース:</label>
         <select id="course_id" name="course_id" required>
@@ -24,6 +28,12 @@
 
         <!-- IN/OUT レイアウト -->
         <label for="layout_in">IN:</label>
+        <select class="form-input input-select" name="cityId[]" id="city" multiple>
+            {% for layout in layouts %}
+                <option value="{{ course.id }}">{{ course.name }}</option>
+                <option data-sel="{{ $item->prefecture_id }}" value="{{ $item->city_id }}" {{ in_array($item->city_id, (array) $searchConditionDto->cityId) ? 'selected' : '' }}>{{ $item->city_name }}</option>
+            {% endfor %}
+        </select>
         <select id="layout_in" name="layout_in" required>
             <option value="">コースを選択してください</option>
         </select>
@@ -47,7 +57,7 @@
     <!-- layouts 一括渡し -->
     <script>
         const layouts = {{ layouts | tojson | safe }};
-        
+
         const courseSelect = document.getElementById("course_id");
         const layoutInSelect = document.getElementById("layout_in");
         const layoutOutSelect = document.getElementById("layout_out");
