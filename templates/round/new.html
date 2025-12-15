@@ -46,6 +46,8 @@
 
     <!-- layouts 一括渡し -->
     <script>
+        const layouts = {{ layouts | tojson | safe }};
+        
         const courseSelect = document.getElementById("course_id");
         const layoutInSelect = document.getElementById("layout_in");
         const layoutOutSelect = document.getElementById("layout_out");
