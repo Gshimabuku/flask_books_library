@@ -12,13 +12,13 @@
         <!-- ラウンド日 -->
         <label for="play_date">ラウンド日:</label>
         <input type="date" id="play_date" name="play_date" required>
-        
+
         <!-- コース選択 -->
-        <label for="course_id">コース:</label>
-        <select id="course_id" name="course_id" required>
+        <label for="course">コース:</label>
+        <select id="course" name="course" required>
             <option value="">選択してください</option>
             {% for course in courses %}
-                <option value="{{ course.id }}">{{ course.name }}</option>
+                <option value="{{ course.name }}">{{ course.name }}</option>
             {% endfor %}
         </select>
 
@@ -46,9 +46,9 @@
 
     <!-- layouts 一括渡し -->
     <script>
-        const layouts = {{ layouts | tojson | safe }};
-
-        const courseSelect = document.getElementById("course_id");
+        const layouts = {{ layouts | tojson }};
+        
+        const courseSelect = document.getElementById("course");
         const layoutInSelect = document.getElementById("layout_in");
         const layoutOutSelect = document.getElementById("layout_out");
 
@@ -61,7 +61,7 @@
             if (!courseId) return;
 
             // 選択されたコースに紐づくレイアウトを抽出
-            const filteredLayouts = layouts.filter(l => l.course && l.course.includes(courseId));
+            const filteredLayouts = layouts.filter(l => l.course && l.course === courseId);
 
             filteredLayouts.forEach(layout => {
                 const optIn = document.createElement("option");
