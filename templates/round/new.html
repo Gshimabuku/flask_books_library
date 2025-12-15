@@ -2,66 +2,88 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>新規ラウンド登録</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新規ラウンド作成</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/round_new.css') }}">
 </head>
 <body>
+    <h1>新規ラウンド作成</h1>
 
-<h1>新規ラウンド登録</h1>
+    <form action="/round/create" method="POST">
+        <!-- ラウンド日 -->
+        <label for="play_date">ラウンド日:</label>
+        <input type="date" id="play_date" name="play_date" required>
 
-<form action="/round/create" method="POST">
-
-    <!-- ラウンド日 -->
-    <div>
-        <label for="play_date">ラウンド日</label><br>
-        <input
-            type="date"
-            id="play_date"
-            name="play_date"
-            required
-        >
-    </div>
-
-    <br>
-
-    <!-- コース（relation） -->
-    <div>
-        <label for="course_id">コース</label><br>
-        <select
-            id="course_id"
-            name="course_id"
-            required
-        >
+        <!-- コース選択 -->
+        <label for="course_id">コース:</label>
+        <select id="course_id" name="course_id" required>
             <option value="">選択してください</option>
-
             {% for course in courses %}
-                <option value="{{ course.id }}">
-                    {{ course.name }}
-                </option>
+                <option value="{{ course.id }}">{{ course.name }}</option>
             {% endfor %}
         </select>
-    </div>
 
-    <br>
+        <!-- IN/OUT レイアウト -->
+        <label for="layout_in">IN:</label>
+        <select id="layout_in" name="layout_in" required>
+            <option value="">コースを選択してください</option>
+        </select>
 
-    <!-- レート -->
-    <div>
-        <label for="rate">レート</label><br>
-        <input
-            type="number"
-            id="rate"
-            name="rate"
-            min="1"
-            step="1"
-            required
-        >
-    </div>
+        <label for="layout_out">OUT:</label>
+        <select id="layout_out" name="layout_out" required>
+            <option value="">コースを選択してください</option>
+        </select>
 
-    <br>
+        <!-- レート -->
+        <label for="rate">レート:</label>
+        <div class="rate-control">
+            <button type="button" id="rate_minus">−</button>
+            <input type="number" id="rate" name="rate" value="0" readonly>
+            <button type="button" id="rate_plus">＋</button>
+        </div>
 
-    <button type="submit">登録する</button>
+        <button type="submit">作成</button>
+    </form>
 
-</form>
+    <!-- layouts 一括渡し -->
+    <script>
+        const layouts = {{ layouts | tojson}};
 
+        const courseSelect = document.getElementById("course_id");
+        const layoutInSelect = document.getElementById("layout_in");
+        const layoutOutSelect = document.getElementById("layout_out");
+
+        courseSelect.addEventListener("change", function() {
+            const courseId = this.value;
+
+            layoutInSelect.innerHTML = '<option value="">選択してください</option>';
+            layoutOutSelect.innerHTML = '<option value="">選択してください</option>';
+
+            if (!courseId) return;
+
+            // 選択されたコースに紐づくレイアウトを抽出
+            const filteredLayouts = layouts.filter(l => l.course && l.course.includes(courseId));
+
+            filteredLayouts.forEach(layout => {
+                const optIn = document.createElement("option");
+                optIn.value = layout.layout_name;
+                optIn.textContent = layout.layout_name;
+                layoutInSelect.appendChild(optIn);
+
+                const optOut = document.createElement("option");
+                optOut.value = layout.layout_name;
+                optOut.textContent = layout.layout_name;
+                layoutOutSelect.appendChild(optOut);
+            });
+        });
+
+        // レートの＋／−ボタン
+        const rateInput = document.getElementById("rate");
+        document.getElementById("rate_plus").addEventListener("click", () => {
+            rateInput.value = parseInt(rateInput.value) + 1;
+        });
+        document.getElementById("rate_minus").addEventListener("click", () => {
+            rateInput.value = parseInt(rateInput.value) - 1;
+        });
+    </script>
 </body>
 </html>

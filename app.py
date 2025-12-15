@@ -21,8 +21,9 @@ def health():
 # --------------------------
 @app.route('/course/list')
 def course_list():
-    data = get_courses()
-    return render_template('course/list.html', courses=data)
+    courses = get_courses()
+    layouts = get_layouts()
+    return render_template('course/list.html', courses=data, layouts=layouts)
 
 # --------------------------
 # ラウンド

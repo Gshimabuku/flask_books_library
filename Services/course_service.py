@@ -1,5 +1,5 @@
 from Services.notion_service import fetch_db_properties
-from config import NOTION_DB_COURSES_ID
+from config import NOTION_DB_COURSES_ID,NOTION_DB_LAYOUTS_ID,NOTION_DB_HOLES_ID
 from Const.course_type import DISPLAY
 
 # ---------------------------------
@@ -18,5 +18,18 @@ def get_courses():
 
     except Exception as e:
         print("get_courses error:", e)
+
+    return results
+
+def get_layouts():
+    results = []
+
+    try:
+        data = fetch_db_properties(NOTION_DB_COURSES_ID)
+
+        results = data
+
+    except Exception as e:
+        print("get_layouts error:", e)
 
     return results
