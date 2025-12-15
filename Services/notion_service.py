@@ -142,7 +142,7 @@ def fetch_db_properties(database_id: str, column_names: list = None):
         props = page["properties"]
 
         item = {
-            "page_id": page["id"]  # ★ ここで page_id を取得
+            "page_id": page["id"]
         }
 
         if column_names is None:

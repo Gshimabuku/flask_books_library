@@ -12,11 +12,7 @@
         <!-- ラウンド日 -->
         <label for="play_date">ラウンド日:</label>
         <input type="date" id="play_date" name="play_date" required>
-
-        {% for course in courses %}
-            <p>{{ course }}</p>
-        {% endfor %}
-
+        
         <!-- コース選択 -->
         <label for="course_id">コース:</label>
         <select id="course_id" name="course_id" required>
