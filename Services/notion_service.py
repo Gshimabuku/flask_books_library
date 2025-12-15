@@ -141,17 +141,21 @@ def fetch_db_properties(database_id: str, column_names: list = None):
     for page in results:
         props = page["properties"]
 
+        item = {
+            "page_id": page["id"]  # ★ ここで page_id を取得
+        }
+
         if column_names is None:
             cols_to_fetch = list(props.keys())
         else:
             cols_to_fetch = column_names
 
-        item = {}
         for col in cols_to_fetch:
             if col in props:
                 item[col] = get_property_value(props[col])
             else:
                 item[col] = None
+
         data_list.append(item)
 
     return data_list
