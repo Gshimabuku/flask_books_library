@@ -25,7 +25,7 @@ def get_layouts():
     results = []
 
     try:
-        data = fetch_db_properties(NOTION_DB_COURSES_ID)
+        data = fetch_db_properties(NOTION_DB_LAYOUTS_ID)
 
         results = data
 
