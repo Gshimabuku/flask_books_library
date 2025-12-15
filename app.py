@@ -29,7 +29,8 @@ def course_list():
 # --------------------------
 @app.route('/round/new')
 def round_new():
-    return render_template('round/new.html')
+    data = get_courses()
+    return render_template('round/new.html', courses=data)
 
 
 if __name__ == '__main__':

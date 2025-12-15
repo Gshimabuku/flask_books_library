@@ -5,10 +5,9 @@ from config import NOTION_API_KEY
 # Notion クライアント
 notion = Client(auth=NOTION_API_KEY)
 
-# ---------------------------------
-# DBからデータ取得
-# 　プロパティ自動検出
-# ---------------------------------
+# --------------------------------------------------------
+# Notion → Python（読み取り）
+# --------------------------------------------------------
 def get_property_value(prop):
     type_ = prop["type"]
     if type_ == "title":
@@ -49,23 +48,99 @@ def get_property_value(prop):
         return prop["last_edited_time"]
     return None
 
-# ---------------------------------
-# DBからデータ取得
-# 　database_id：データベースID（configから取得）
-# 　column_names：取得カラムリスト（引数なしの場合全カラム）
-# ---------------------------------
+
+# --------------------------------------------------------
+# Python → Notion（保存 共通コンバータ）
+# --------------------------------------------------------
+def to_notion_property(key, value, column_type="text"):
+    """
+    value から Notion 用のプロパティ構造に変換する
+    column_type を指定すると select, number なども対応
+    """
+
+    if value is None:
+        return None
+
+    if column_type == "title":
+        return {"title": [{"text": {"content": value}}]}
+
+    if column_type == "rich_text":
+        return {"rich_text": [{"text": {"content": value}}]}
+
+    if column_type == "number":
+        return {"number": value}
+
+    if column_type == "select":
+        return {"select": {"name": value}}
+
+    if column_type == "multi_select":
+        return {"multi_select": [{"name": v} for v in value]}
+
+    if column_type == "checkbox":
+        return {"checkbox": bool(value)}
+
+    if column_type == "date":
+        return {"date": {"start": value}}
+
+    if column_type == "relation":
+        # value は ID のリスト
+        return {"relation": [{"id": v} for v in value]}
+
+    # デフォルト: title と同じ扱い
+    return {"rich_text": [{"text": {"content": str(value)}}]}
+
+
+# --------------------------------------------------------
+# 保存処理（新規作成）
+# --------------------------------------------------------
+def create_page(database_id: str, data: dict, column_types: dict):
+    """
+    data: { "column": value }
+    column_types: { "column": "type" }
+    """
+    properties = {}
+
+    for col, value in data.items():
+        if col in column_types:
+            properties[col] = to_notion_property(col, value, column_types[col])
+        else:
+            # タイプ未指定 → rich_text として保存
+            properties[col] = to_notion_property(col, value, "rich_text")
+
+    return notion.pages.create(
+        parent={"database_id": database_id},
+        properties=properties
+    )
+
+
+# --------------------------------------------------------
+# 保存処理（更新）
+# --------------------------------------------------------
+def update_page(page_id: str, data: dict, column_types: dict):
+    properties = {}
+
+    for col, value in data.items():
+        if col in column_types:
+            properties[col] = to_notion_property(col, value, column_types[col])
+        else:
+            properties[col] = to_notion_property(col, value, "rich_text")
+
+    return notion.pages.update(
+        page_id=page_id,
+        properties=properties
+    )
+
+
+# --------------------------------------------------------
+# DBから読み取り
+# --------------------------------------------------------
 def fetch_db_properties(database_id: str, column_names: list = None):
-    """
-    指定 DB のデータを取得。
-    column_names が None の場合は全カラム取得
-    """
     results = notion.databases.query(database_id=database_id)["results"]
     data_list = []
 
     for page in results:
         props = page["properties"]
 
-        # column_names が None なら全カラム取得
         if column_names is None:
             cols_to_fetch = list(props.keys())
         else:
@@ -76,7 +151,7 @@ def fetch_db_properties(database_id: str, column_names: list = None):
             if col in props:
                 item[col] = get_property_value(props[col])
             else:
-                item[col] = None  # カラムが存在しない場合は None
+                item[col] = None
         data_list.append(item)
 
     return data_list

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>新規ラウンド登録</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<h1>新規ラウンド登録</h1>
+
+<form action="/round/create" method="POST">
+
+    <!-- ラウンド日 -->
+    <div>
+        <label for="play_date">ラウンド日</label><br>
+        <input
+            type="date"
+            id="play_date"
+            name="play_date"
+            required
+        >
+    </div>
+
+    <br>
+
+    <!-- コース（relation） -->
+    <div>
+        <label for="course_id">コース</label><br>
+        <select
+            id="course_id"
+            name="course_id"
+            required
+        >
+            <option value="">選択してください</option>
+
+            {% for course in courses %}
+                <option value="{{ course.id }}">
+                    {{ course.name }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <br>
+
+    <!-- レート -->
+    <div>
+        <label for="rate">レート</label><br>
+        <input
+            type="number"
+            id="rate"
+            name="rate"
+            min="1"
+            step="1"
+            required
+        >
+    </div>
+
+    <br>
+
+    <button type="submit">登録する</button>
+
+</form>
+
+</body>
+</html>
