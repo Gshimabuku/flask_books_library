@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>新規ラウンド作成</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/round_new.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <h1>新規ラウンド作成</h1>
@@ -11,7 +11,7 @@
     <form action="/round/create" method="POST">
         <!-- ラウンド日 -->
         <label for="play_date">ラウンド日:</label>
-        <input type="date" id="play_date" name="play_date" required>
+        <input type="date" id="play_date" name="play_date" required><br>
 
         <!-- コース選択 -->
         <label for="course_id">コース:</label>
@@ -20,18 +20,18 @@
             {% for course in courses %}
                 <option value="{{ course.id }}">{{ course.name }}</option>
             {% endfor %}
-        </select>
+        </select><br>
 
         <!-- IN/OUT レイアウト -->
         <label for="layout_in">IN:</label>
         <select id="layout_in" name="layout_in" required>
             <option value="">コースを選択してください</option>
-        </select>
+        </select><br>
 
         <label for="layout_out">OUT:</label>
         <select id="layout_out" name="layout_out" required>
             <option value="">コースを選択してください</option>
-        </select>
+        </select><br>
 
         <!-- レート -->
         <label for="rate">レート:</label>
