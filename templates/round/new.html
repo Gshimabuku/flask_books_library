@@ -8,8 +8,13 @@
 <body>
     <h1>新規ラウンド作成</h1>
 
-    {% for t in test %}
-        <p>{{ t }}</p>
+    {% for course in courses %}
+        <p>{{ course }}</p>
+        <p>{{ course.id }}</p>
+        <p>{{ course.name }}</p>
+        <p>{{ course.address }}</p>
+        <p>{{ course.type }}</p>
+        <p>{{ course.par }}</p>
     {% endfor %}
 
     <form action="/round/create" method="POST">
@@ -22,7 +27,7 @@
         <select id="course" name="course" required>
             <option value="">選択してください</option>
             {% for course in courses %}
-                <option value="{{ course.name }}">{{ course.name }}</option>
+                <option value="{{ course.id }}">{{ course.name }}</option>
             {% endfor %}
         </select>
 

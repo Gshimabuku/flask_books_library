@@ -33,16 +33,3 @@ def get_layouts():
         print("get_layouts error:", e)
 
     return results
-
-def get_test_course():
-    results = []
-
-    try:
-        data = test_db(NOTION_DB_COURSES_ID)
-
-        results = data
-
-    except Exception as e:
-        print("get_courses error:", e)
-
-    return results

@@ -159,8 +159,3 @@ def fetch_db_properties(database_id: str, column_names: list = None):
         data_list.append(item)
 
     return data_list
-
-def test_db(database_id: str):
-    results = notion.databases.query(database_id=database_id)["results"]
-
-    return results

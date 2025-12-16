@@ -1,6 +1,6 @@
 from flask import Flask, render_template, jsonify, redirect, url_for, Response
 import os
-from Services.course_service import get_courses,get_layouts,get_test_course
+from Services.course_service import get_courses,get_layouts
 
 app = Flask(__name__)
 
@@ -31,8 +31,7 @@ def course_list():
 def round_new():
     courses = get_courses()
     layouts = get_layouts()
-    test = get_test_course()
-    return render_template('round/new.html', courses=courses, layouts=layouts, test=test)
+    return render_template('round/new.html', courses=courses, layouts=layouts)
 
 
 if __name__ == '__main__':
