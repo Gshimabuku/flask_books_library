@@ -8,6 +8,10 @@
 <body>
     <h1>新規ラウンド作成</h1>
 
+    {% for t in test %}
+        <p>{{ t }}</p>
+    {% endfor %}
+
     <form action="/round/create" method="POST">
         <!-- ラウンド日 -->
         <label for="play_date">ラウンド日:</label>
