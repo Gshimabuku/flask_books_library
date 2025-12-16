@@ -1,4 +1,4 @@
-from Services.notion_service import fetch_db_properties
+from Services.notion_service import fetch_db_properties,test_db
 from config import NOTION_DB_COURSES_ID,NOTION_DB_LAYOUTS_ID,NOTION_DB_HOLES_ID
 from Const.course_type import DISPLAY
 
