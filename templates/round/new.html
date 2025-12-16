@@ -10,16 +10,6 @@
 <body>
     <h1>新規ラウンド作成</h1>
 
-    {% for course in courses %}
-    <p>{{ course }}</p>
-    <p>{{ course.id }}</p>
-    <p>{{ course.page_id }}</p>
-    <p>{{ course.name }}</p>
-    <p>{{ course.address }}</p>
-    <p>{{ course.type }}</p>
-    <p>{{ course.par }}</p>
-    {% endfor %}
-
     <form action="/round/create" method="POST">
         <!-- ラウンド日 -->
         <label for="play_date">ラウンド日:</label>
