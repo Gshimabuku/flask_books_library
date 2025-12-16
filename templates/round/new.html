@@ -71,11 +71,8 @@
                 option.value = layout.page_id;   // ← page_id を使う方が安全
                 option.textContent = layout.layout_name;
 
-                if (layout.layout_name === "IN") {
-                    layoutInSelect.appendChild(option);
-                } else if (layout.layout_name === "OUT") {
-                    layoutOutSelect.appendChild(option);
-                }
+                layoutInSelect.appendChild(option);
+                layoutOutSelect.appendChild(option);
             });
         });
 
