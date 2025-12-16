@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <title>新規ラウンド作成</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
+
 <body>
     <h1>新規ラウンド作成</h1>
 
     {% for course in courses %}
-        <p>{{ course }}</p>
-        <p>{{ course.id }}</p>
-        <p>{{ course.page_id }}</p>
-        <p>{{ course.name }}</p>
-        <p>{{ course.address }}</p>
-        <p>{{ course.type }}</p>
-        <p>{{ course.par }}</p>
+    <p>{{ course }}</p>
+    <p>{{ course.id }}</p>
+    <p>{{ course.page_id }}</p>
+    <p>{{ course.name }}</p>
+    <p>{{ course.address }}</p>
+    <p>{{ course.type }}</p>
+    <p>{{ course.par }}</p>
     {% endfor %}
 
     <form action="/round/create" method="POST">
@@ -28,7 +30,7 @@
         <select id="course" name="course" required>
             <option value="">選択してください</option>
             {% for course in courses %}
-                <option value="{{ course.page_id }}">{{ course.name }}</option>
+            <option value="{{ course.page_id }}">{{ course.name }}</option>
             {% endfor %}
         </select>
 
@@ -57,12 +59,12 @@
     <!-- layouts 一括渡し -->
     <script>
         const layouts = {{ layouts | tojson }};
-        
+
         const courseSelect = document.getElementById("course");
         const layoutInSelect = document.getElementById("layout_in");
         const layoutOutSelect = document.getElementById("layout_out");
 
-        courseSelect.addEventListener("change", function() {
+        courseSelect.addEventListener("change", function () {
             const courseId = this.value;
 
             layoutInSelect.innerHTML = '<option value="">選択してください</option>';
@@ -70,19 +72,20 @@
 
             if (!courseId) return;
 
-            // 選択されたコースに紐づくレイアウトを抽出
-            const filteredLayouts = layouts.filter(l => l.course && l.course === courseId);
+            const filteredLayouts = layouts.filter(
+                l => Array.isArray(l.course) && l.course.includes(courseId)
+            );
 
             filteredLayouts.forEach(layout => {
-                const optIn = document.createElement("option");
-                optIn.value = layout.layout_name;
-                optIn.textContent = layout.layout_name;
-                layoutInSelect.appendChild(optIn);
+                const option = document.createElement("option");
+                option.value = layout.page_id;   // ← page_id を使う方が安全
+                option.textContent = layout.layout_name;
 
-                const optOut = document.createElement("option");
-                optOut.value = layout.layout_name;
-                optOut.textContent = layout.layout_name;
-                layoutOutSelect.appendChild(optOut);
+                if (layout.layout_name === "IN") {
+                    layoutInSelect.appendChild(option);
+                } else if (layout.layout_name === "OUT") {
+                    layoutOutSelect.appendChild(option);
+                }
             });
         });
 
@@ -96,4 +99,5 @@
         });
     </script>
 </body>
+
 </html>
