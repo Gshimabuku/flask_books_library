@@ -27,7 +27,7 @@
         <select id="course" name="course" required>
             <option value="">選択してください</option>
             {% for course in courses %}
-                <option value="{{ course.id }}">{{ course.name }}</option>
+                <option value="{{ course.page_id }}">{{ course.name }}</option>
             {% endfor %}
         </select>
 
