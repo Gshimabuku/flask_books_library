@@ -67,12 +67,17 @@
             );
 
             filteredLayouts.forEach(layout => {
-                const option = document.createElement("option");
-                option.value = layout.page_id;   // ← page_id を使う方が安全
-                option.textContent = layout.layout_name;
+                // IN 用
+                const optIn = document.createElement("option");
+                optIn.value = layout.page_id;
+                optIn.textContent = layout.layout_name;
+                layoutInSelect.appendChild(optIn);
 
-                layoutInSelect.appendChild(option);
-                layoutOutSelect.appendChild(option);
+                // OUT 用（別インスタンス）
+                const optOut = document.createElement("option");
+                optOut.value = layout.page_id;
+                optOut.textContent = layout.layout_name;
+                layoutOutSelect.appendChild(optOut);
             });
         });
 
