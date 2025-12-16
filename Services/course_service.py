@@ -40,9 +40,6 @@ def get_test_course():
     try:
         data = test_db(NOTION_DB_COURSES_ID)
 
-        for course in data:
-            course["type_display"] = DISPLAY.get(course["type"], "不明")
-
         results = data
 
     except Exception as e:
